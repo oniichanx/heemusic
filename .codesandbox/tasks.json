@@ -1,0 +1,54 @@
+{
+  // These tasks will run in order when initializing your CodeSandbox project.
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "npm install"
+    },
+    {
+      "name": "npx prisma generate",
+      "command": "npx prisma generate"
+    }
+  ],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
+  "tasks": {
+    "prisma:generate": {
+      "name": "prisma:generate",
+      "command": "yarn prisma:generate"
+    },
+    "start": {
+      "name": "start",
+      "command": "yarn start"
+    },
+    "dev": {
+      "name": "dev",
+      "command": "yarn dev",
+      "runAtStart": true
+    },
+    "build": {
+      "name": "build",
+      "command": "yarn build"
+    },
+    "clean": {
+      "name": "clean",
+      "command": "yarn clean"
+    },
+    "lint": {
+      "name": "lint",
+      "command": "yarn lint"
+    },
+    "lint:fix": {
+      "name": "lint:fix",
+      "command": "yarn lint:fix"
+    },
+    "format": {
+      "name": "format",
+      "command": "yarn format"
+    },
+    "format:fix": {
+      "name": "format:fix",
+      "command": "yarn format:fix"
+    }
+  }
+}
