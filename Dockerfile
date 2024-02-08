@@ -24,7 +24,7 @@ WORKDIR /opt/heemusic/
 # Copy compiled code
 COPY --from=builder /opt/heemusic/dist ./dist
 COPY --from=builder /opt/heemusic/src/utils/LavaLogo.txt ./src/utils/LavaLogo.txt
-COPY --from=builder /opt/heemusic/database/lavamusic.db ./database/lavamusic.db
+COPY --from=builder /opt/heemusic/src/database/lavamusic.db ./src/database/lavamusic.db
 
 # Copy package files and install dependencies
 COPY package*.json ./

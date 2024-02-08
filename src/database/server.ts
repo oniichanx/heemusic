@@ -2,9 +2,9 @@ import Database from 'better-sqlite3';
 
 import config from '../config.js';
 
-const db = new Database('./database/lavamusic.db', {
-    fileMustExist: false,
-    readonly: false,
+const db = new Database('./dist/database/lavamusic.db', {
+    fileMustExist: false,
+    readonly: false,
 });
 db.pragma('journal_mode=WAL');
 
