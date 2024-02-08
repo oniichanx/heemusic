@@ -29,7 +29,7 @@ COPY --from=builder /opt/heemusic/database/lavamusic.db ./database/lavamusic.db
 # Copy package files and install dependencies
 COPY package*.json ./
 RUN apt-get update && \
-    apt-get install -y openssl && \
+    apt-get install -y && \
     npm install --only=production
 
 
