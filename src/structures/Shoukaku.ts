@@ -13,15 +13,15 @@ export default class ShoukakuClient extends Shoukaku {
             reconnectTries: 2,
             restTimeout: 10000,
             userAgent: `heemusic (@devblacky)`, // don't change this
-            nodeResolver: (nodes) => 
+            nodeResolver: nodes =>
                 [...nodes.values()]
                     .filter(node => node.state === 2)
                     .sort((a, b) => a.penalties - b.penalties)
-                    .shift()
+                    .shift(),
         });
         this.client = client;
         this.on('ready', (name, reconnected) => {
-            this.client.shoukaku.emit(reconnected ? 'nodeReconnect' : 'nodeConnect',name,)
+            this.client.shoukaku.emit(reconnected ? 'nodeReconnect' : 'nodeConnect', name);
         });
 
         this.on('error', (name, error) => this.client.shoukaku.emit('nodeError', name, error));

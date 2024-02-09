@@ -23,7 +23,7 @@ import loadPlugins from '../plugin/index.js';
 import { Utils } from '../utils/Utils.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export default class Lavamusic extends Client {
+export default class heemusic extends Client {
     public commands: Collection<string, any> = new Collection();
     public aliases: Collection<string, any> = new Collection();
     public db = new ServerData();

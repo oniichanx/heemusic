@@ -44,7 +44,8 @@ export default class Join extends Command {
                     embed
                         .setColor(this.client.color.main)
                         .setDescription(
-                            `Joined <#${player.node.manager.connections.get(ctx.guild.id).channelId}>`),
+                            `Joined <#${player.node.manager.connections.get(ctx.guild.id).channelId}>`
+                        ),
                 ],
             });
         } else {

@@ -3,7 +3,6 @@ import { Player } from 'shoukaku';
 import { Song } from '../../structures/Dispatcher.js';
 import { Dispatcher, Event, heemusic } from '../../structures/index.js';
 import { updateSetup } from '../../utils/SetupSystem.js';
-import { time } from 'console';
 
 export default class QueueEnd extends Event {
     constructor(client: heemusic, file: string) {

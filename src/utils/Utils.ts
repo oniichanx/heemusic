@@ -8,7 +8,7 @@ import {
     TextChannel,
 } from 'discord.js';
 
-import { Context, heemusic} from '../structures/index.js';
+import { Context, heemusic } from '../structures/index.js';
 import config from '../config.js';
 
 export class Utils {
@@ -27,7 +27,6 @@ export class Utils {
         }
     }
 
-    
     public static updateStatus(client: heemusic, guildId?: string): void {
         if (client.user) {
             if (guildId === config.guildId) {
@@ -51,7 +50,6 @@ export class Utils {
             }
         }
     }
-
 
     public static chunk(array: any[], size: number): any[] {
         const chunked_arr = [];
@@ -149,12 +147,12 @@ export class Utils {
         if (ctx.isInteraction) {
             msg = ctx.deferred
                 ? await ctx.interaction.followUp({
-                    ...msgOptions,
-                    fetchReply: true as boolean,
+                      ...msgOptions,
+                      fetchReply: true as boolean,
                   })
                 : await ctx.interaction.reply({
-                    ...msgOptions,
-                    fetchReply: true,
+                      ...msgOptions,
+                      fetchReply: true,
                   });
         } else {
             msg = await (ctx.channel as TextChannel).send({

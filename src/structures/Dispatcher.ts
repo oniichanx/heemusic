@@ -88,7 +88,7 @@ export default class Dispatcher {
         return this.client.queue.has(this.guildId);
     }
     get volume(): number {
-        return this.player.filters.volume;
+        return this.player.volume;
     }
     public async play(): Promise<void> {
         if (!this.exists || (!this.queue.length && !this.current)) {
@@ -196,7 +196,7 @@ export default class Dispatcher {
         let attempts = 0;
         while (attempts < maxAttempts) {
             const potentialChoice = this.buildTrack(
-                metadata[Math.floor(Math.random() * metadata.length)], 
+                metadata[Math.floor(Math.random() * metadata.length)],
                 this.client.user
             );
             if (
