@@ -75,7 +75,7 @@ export default class SetupButtons extends Event {
                 interaction, 
                 `You need to have the Dj role to use this command`, 
                 this.client.color.red
-                );
+            );
             return;
         }
         if (message) {

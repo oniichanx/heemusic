@@ -28,7 +28,7 @@ export default class SetupSystem extends Event {
                 channel,
                 `I don't have enough permission to connect/speak in <#${message.member.voice.channel.id}>`
             );
-            if (message) await message.delete().catch(() => { });
+            if (message) await message.delete().catch(() => {});
             return;
         }
 
@@ -39,7 +39,8 @@ export default class SetupSystem extends Event {
         ) {
             await oops(
                 channel,
-                `You are not connected to <#${message.guild.members.cache.get(this.client.user.id).voice.channelId
+                `You are not connected to <#${
+                    message.guild.members.cache.get(this.client.user.id).voice.channelId
                 }> to queue songs`
             );
             if (message) await message.delete().catch(() => {});
@@ -55,7 +56,7 @@ export default class SetupSystem extends Event {
             );
         }
         await setupStart(this.client, message.content, player, message);
-        if (message) await message.delete().catch(() => { });
+        if (message) await message.delete().catch(() => {});
     }
 }
 
