@@ -131,7 +131,7 @@ export default class Setup extends Command {
                     return await ctx.sendMessage({
                         embeds: [
                             {
-                                description: 'The song request channel doesn\'t exist',
+                                description: 'ไม่มีช่องทางขอต่อคิวเย็ดแล้วจร้าไปเปิดห้องใหม่นะจ๊ะ',
                                 color: client.color.red,
                             },
                         ],
@@ -160,7 +160,7 @@ export default class Setup extends Command {
                     return await ctx.sendMessage({
                         embeds: [
                             {
-                                description: 'The song request channel doesn\'t exist',
+                                description: 'ไม่มีช่องทางขอต่อคิวเย็ดแล้วจร้าไปเปิดห้องใหม่นะจ๊ะ',
                                 color: client.color.red,
                             },
                         ],
