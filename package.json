@@ -12,7 +12,7 @@
         "lint:fix": "eslint . --fix --cache --ext .js,.jsx,.ts,.tsx",
         "format": "prettier --check .",
         "format:fix": "prettier --write .",
-        "postinstall": "npm run build && node dist/index.js"
+        "postinstall": "npm run build"
     },
     "repository": {
         "type": "git",
