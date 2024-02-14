@@ -4,7 +4,9 @@ WORKDIR /opt/heemusic/
 
 # Copy package files
 COPY package*.json ./
-COPY tsconfig.json ./
+
+# Create an empty tsconfig.json file if it doesn't exist
+RUN test -f tsconfig.json || echo '{}' > tsconfig.json
 
 # Update package lists and install dependencies
 RUN apt-get update && \
