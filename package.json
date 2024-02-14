@@ -11,7 +11,7 @@
         "lint": "eslint . --cache --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint . --fix --cache --ext .js,.jsx,.ts,.tsx",
         "format": "prettier --check .",
-        "format:fix": "prettier --write ."
+        "format:fix": "prettier --write .",
         "postinstall": "npm run build && node dist/index.js"
     },
     "repository": {
