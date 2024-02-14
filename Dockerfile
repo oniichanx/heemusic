@@ -4,8 +4,6 @@ WORKDIR /opt/heemusic/
 
 # Copy package files
 COPY package*.json ./
-
-# Copy tsconfig.json
 COPY tsconfig.json ./
 
 # Update package lists and install dependencies
@@ -32,7 +30,7 @@ COPY --from=builder /opt/heemusic/src/utils/LavaLogo.txt ./src/utils/LavaLogo.tx
 COPY --from=builder /opt/heemusic/src/database/lavamusic.db ./src/database/lavamusic.db
 
 # Copy package files and install production dependencies
-COPY package*.json ./
+COPY --from=builder /opt/heemusic/package*.json ./
 RUN apt-get update && \
     apt-get install -y --fix-missing && \
     npm install --only=production
