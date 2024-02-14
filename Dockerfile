@@ -5,6 +5,9 @@ WORKDIR /opt/heemusic/
 # Copy package files
 COPY package*.json ./
 
+# Copy tsconfig.json
+COPY tsconfig.json ./
+
 # Update package lists and install dependencies
 RUN apt-get update && \
     apt-get install -y --fix-missing && \
