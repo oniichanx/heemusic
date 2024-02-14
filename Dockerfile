@@ -1,11 +1,14 @@
-# Stage 1: Build TypeScript
 FROM node:18 as builder
 
 WORKDIR /opt/lavamusic/
 
-# Copy package files and install dependencies
+# Copy package files
 COPY package*.json ./
-RUN npm install
+
+# Update package lists and install dependencies
+RUN apt-get update && \
+    apt-get install -y --fix-missing && \
+    npm install
 
 # Copy source code
 COPY . .
@@ -13,7 +16,7 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
-# Stage 2: Create production image
+# Create production image
 FROM node:18-slim
 
 ENV NODE_ENV production
@@ -23,10 +26,12 @@ WORKDIR /opt/lavamusic/
 # Copy compiled code
 COPY --from=builder /opt/lavamusic/dist ./dist
 COPY --from=builder /opt/lavamusic/src/utils/LavaLogo.txt ./src/utils/LavaLogo.txt
-COPY --from=builder /opt/lavamusic/src/database/lavamusic.db ./src/database/lavamusic.db
+COPY --from=builder /opt/lavamusic/database/lavamusic.db ./database/lavamusic.db
 
-# Copy package files and install dependencies
+# Copy package files and install production dependencies
 COPY package*.json ./
-RUN npm install --only=production
+RUN apt-get update && \
+    apt-get install -y --fix-missing && \
+    npm install --only=production
 
 CMD [ "node", "dist/index.js" ]
