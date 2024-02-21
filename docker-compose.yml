@@ -5,6 +5,7 @@ services:
         restart: on-failure
         environment:
             SERVER_PORT: 2333
+            SERVER_ADDRESS: 0.0.0.0
         volumes:
             # mount application.yml from the same directory or use environment variables
             - ./Lavalink/application.yml:/opt/Lavalink/application.yml
