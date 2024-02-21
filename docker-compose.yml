@@ -28,14 +28,15 @@ services:
         container_name: heemusic
         image: ghcr.io/oniichanx/heemusic:main
         environment:
-            - LAVALINK_URL=lavalink:2333
             # Your lavalink url
-            - LAVALINK_AUTH=youshallnotpass
+            - LAVALINK_URL=lavalink:2333
             # Your lavalink password
-            - LAVALINK_NAME=oniichanx'
+            - LAVALINK_AUTH=youshallnotpass
             # Your lavalink name
-            - LAVALINK_SECURE=false
+            - LAVALINK_NAME=oniichanx'
             # true if you are using https
+            - LAVALINK_SECURE=false
+
         volumes:
             # mount .env from the same directory or use environment variables
             - .env:/opt/heemusic/.env
