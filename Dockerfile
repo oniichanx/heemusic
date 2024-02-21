@@ -1,4 +1,4 @@
-FROM node:18 as builder
+FROM node:20 as builder
 
 WORKDIR /opt/heemusic/
 
@@ -16,11 +16,14 @@ RUN apt-get update && \
 # Copy source code
 COPY . .
 
+# Copy tsconfig.json
+COPY tsconfig.json ./
+
 # Build TypeScript
 RUN npm run build
 
 # Create production image
-FROM node:18-slim
+FROM node:20-slim
 
 ENV NODE_ENV production
 
