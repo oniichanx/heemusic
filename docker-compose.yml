@@ -28,7 +28,6 @@ services:
         container_name: heemusic
         image: ghcr.io/oniichanx/heemusic:main
         environment:
-            # Your mongodb url
             - LAVALINK_URL=lavalink:2333
             # Your lavalink url
             - LAVALINK_AUTH=youshallnotpass
