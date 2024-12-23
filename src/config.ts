@@ -39,7 +39,7 @@ export default {
 		jiosaavn: 'https://i.imgur.com/N9Nt80h.png',
 	} as any,
 	links: {
-		img: 'https://i.imgur.com/ud3EWNh.jpg',
+		img: process.env.IMG_LINK || 'https://media.giphy.com/media/gW7XhsJuzIgH6/giphy.gif',
 	},
 };
 
