@@ -78,7 +78,7 @@
 [youtube-source]: https://github.com/lavalink-devs/youtube-source
 [jiosaavn]: https://github.com/oniichanx/jiosaavn-plugin
 
-To Setup a Lavalink server on Windows, Linux, or Replit, [Click Here!](https://github.com/LucasB25/lavalink-server)
+To Setup a Lavalink server on Windows, Linux, or Replit, [Click Here!](https://github.com/oniichanx/lavalink-server)
 
 ### **Need help with plugins?**
 

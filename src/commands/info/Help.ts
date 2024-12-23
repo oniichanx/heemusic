@@ -114,7 +114,7 @@ export default class Help extends Command {
 /**
  * Project: heemusic
  * Author: oniichanx
- * Main Contributor: LucasB25
+ * Main Contributor: oniichanx
  * Company: ArchGG
  * Copyright (c) 2024. All rights reserved.
  * This code is the property of ArchGG and may not be reproduced or
