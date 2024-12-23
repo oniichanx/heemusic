@@ -1,131 +1,145 @@
-import { LoadType } from "shoukaku";
-import { Command, type Context, type heemusic } from "../../structures/index.js";
+import type { AutocompleteInteraction } from 'discord.js';
+import { Command, type Context, type heemusic } from '../../structures/index';
 
 export default class AddSong extends Command {
-    constructor(client: heemusic) {
-        super(client, {
-            name: "addsong",
-            description: {
-                content: "cmd.addsong.description",
-                examples: ["addsong <playlist> <song>"],
-                usage: "addsong <playlist> <song>",
-            },
-            category: "playlist",
-            aliases: ["as"],
-            cooldown: 3,
-            args: true,
-            vote: true,
-            player: {
-                voice: false,
-                dj: false,
-                active: false,
-                djPerm: null,
-            },
-            permissions: {
-                dev: false,
-                client: ["SendMessages", "ReadMessageHistory", "ViewChannel", "EmbedLinks"],
-                user: [],
-            },
-            slashCommand: true,
-            options: [
-                {
-                    name: "playlist",
-                    description: "cmd.addsong.options.playlist",
-                    type: 3,
-                    required: true,
-                    autocomplete: true,
-                },
-                {
-                    name: "song",
-                    description: "cmd.addsong.options.song",
-                    type: 3,
-                    required: true,
-                },
-            ],
-        });
-    }
+	constructor(client: heemusic) {
+		super(client, {
+			name: 'addsong',
+			description: {
+				content: 'cmd.addsong.description',
+				examples: ['addsong test exemple', 'addsong exemple https://www.youtube.com/watch?v=example'],
+				usage: 'addsong <playlist> <song>',
+			},
+			category: 'playlist',
+			aliases: ['as'],
+			cooldown: 3,
+			args: true,
+			vote: true,
+			player: {
+				voice: false,
+				dj: false,
+				active: false,
+				djPerm: null,
+			},
+			permissions: {
+				dev: false,
+				client: ['SendMessages', 'ReadMessageHistory', 'ViewChannel', 'EmbedLinks'],
+				user: [],
+			},
+			slashCommand: true,
+			options: [
+				{
+					name: 'playlist',
+					description: 'cmd.addsong.options.playlist',
+					type: 3,
+					required: true,
+					autocomplete: true,
+				},
+				{
+					name: 'song',
+					description: 'cmd.addsong.options.song',
+					type: 3,
+					required: true,
+				},
+			],
+		});
+	}
 
-    public async run(client: heemusic, ctx: Context, args: string[]): Promise<any> {
-        const playlist = args.shift();
-        const song = args.join(" ");
+	public async run(client: heemusic, ctx: Context, args: string[]): Promise<any> {
+		const playlist = args.shift();
+		const song = args.join(' ');
 
-        if (!playlist) {
-            const errorMessage = this.client
-                .embed()
-                .setDescription(ctx.locale("cmd.addsong.messages.no_playlist"))
-                .setColor(this.client.color.red);
-            return await ctx.sendMessage({ embeds: [errorMessage] });
-        }
+		if (!playlist) {
+			return await ctx.sendMessage({
+				embeds: [
+					{
+						description: ctx.locale('cmd.addsong.messages.no_playlist'),
+						color: this.client.color.red,
+					},
+				],
+			});
+		}
 
-        if (!song) {
-            const errorMessage = this.client
-                .embed()
-                .setDescription(ctx.locale("cmd.addsong.messages.no_song"))
-                .setColor(this.client.color.red);
-            return await ctx.sendMessage({ embeds: [errorMessage] });
-        }
+		if (!song) {
+			return await ctx.sendMessage({
+				embeds: [
+					{
+						description: ctx.locale('cmd.addsong.messages.no_song'),
+						color: this.client.color.red,
+					},
+				],
+			});
+		}
+		const res = await client.manager.search(song, ctx.author);
+		if (!res) {
+			return await ctx.sendMessage({
+				embeds: [
+					{
+						description: ctx.locale('cmd.addsong.messages.no_songs_found'),
+						color: this.client.color.red,
+					},
+				],
+			});
+		}
 
-        const playlistData = await client.db.getPlaylist(ctx.author.id, playlist);
+		const playlistData = await client.db.getPlaylist(ctx.author?.id!, playlist);
+		if (!playlistData) {
+			return await ctx.sendMessage({
+				embeds: [
+					{
+						description: ctx.locale('cmd.addsong.messages.playlist_not_found'),
+						color: this.client.color.red,
+					},
+				],
+			});
+		}
 
-        if (!playlistData) {
-            const playlistNotFoundError = this.client
-                .embed()
-                .setDescription(ctx.locale("cmd.addsong.messages.playlist_not_found"))
-                .setColor(this.client.color.red);
-            return await ctx.sendMessage({ embeds: [playlistNotFoundError] });
-        }
+		let trackStrings: any;
+		let count = 0;
+		if (res.loadType === 'playlist') {
+			trackStrings = res.tracks.map(track => track.encoded);
+			count = res.tracks.length;
+		} else if (res.loadType === 'track') {
+			trackStrings = [res.tracks[0].encoded];
+			count = 1;
+		} else if (res.loadType === 'search') {
+			trackStrings = [res.tracks[0].encoded];
+			count = 1;
+		}
 
-        const res = await client.queue.search(song);
-        if (!res) {
-            const noSongsFoundError = this.client
-                .embed()
-                .setDescription(ctx.locale("cmd.addsong.messages.no_songs_found"))
-                .setColor(this.client.color.red);
-            return await ctx.sendMessage({ embeds: [noSongsFoundError] });
-        }
+		await client.db.addTracksToPlaylist(ctx.author?.id!, playlist, trackStrings);
 
-        let trackStrings: any;
-        let count: number;
-        if (res.loadType === LoadType.PLAYLIST) {
-            trackStrings = res.data.tracks;
-            count = res.data.tracks.length;
-        } else if (res.loadType === LoadType.TRACK) {
-            trackStrings = [res.data];
-            count = 1;
-        }
+		return await ctx.sendMessage({
+			embeds: [
+				{
+					description: ctx.locale('cmd.addsong.messages.added', { playlist: playlistData.name, count }),
+					color: this.client.color.green,
+				},
+			],
+		});
+	}
 
-        client.db.addSong(ctx.author.id, playlist, trackStrings);
+	public async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
+		const focusedValue = interaction.options.getFocused();
+		const userId = interaction.user.id;
 
-        const successMessage = this.client
-            .embed()
-            .setDescription(ctx.locale("cmd.addsong.messages.added", { count, playlist: playlistData.name }))
-            .setColor(this.client.color.green);
-        await ctx.sendMessage({ embeds: [successMessage] });
-    }
+		const playlists = await this.client.db.getUserPlaylists(userId);
 
-    // Add autocomplete handler
-    public async autocomplete(interaction) {
-        const focusedValue = interaction.options.getFocused();
-        const userId = interaction.user.id;
+		const filtered = playlists.filter(playlist => playlist.name.toLowerCase().startsWith(focusedValue.toLowerCase()));
 
-        // Fetch user playlists from the database
-        const playlists = await this.client.db.getUserPlaylists(userId);
-
-        // Filter playlists based on the focused value and respond
-        const filtered = playlists.filter(playlist =>
-            playlist.name.toLowerCase().startsWith(focusedValue.toLowerCase())
-        );
-
-        await interaction.respond(
-            filtered.map(playlist => ({ name: playlist.name, value: playlist.name }))
-        );
-    }
+		return await interaction.respond(
+			filtered.map(playlist => ({
+				name: playlist.name,
+				value: playlist.name,
+			})),
+		);
+	}
 }
 
 /**
  * Project: heemusic
  * Author: oniichanx
- * Main Contributor: oniichanx
+ * Main Contributor: LucasB25
  * Company: ArchGG
  * Copyright (c) 2024. All rights reserved.
  * This code is the property of ArchGG and may not be reproduced or

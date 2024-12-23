@@ -6,7 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
-
+bun.lockb
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -451,7 +451,7 @@ paket-files/
 # FAKE - F# Make
 .fake/
 
-# CodeRush personal settings
+# ArchGGush personal settings
 .cr/personal
 
 # Python Tools for Visual Studio (PTVS)
@@ -528,7 +528,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Heemusic
+# heemusic
 Lavalink/logs
 Lavalink/plugins
 Lavalink/application.yml

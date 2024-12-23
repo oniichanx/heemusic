@@ -1,69 +1,68 @@
-import { Command, type Context, type heemusic } from "../../structures/index.js";
+import { Command, type Context, type heemusic } from '../../structures/index.js';
 
 export default class Vibrato extends Command {
-    constructor(client: heemusic) {
-        super(client, {
-            name: "vibrato",
-            description: {
-                content: "cmd.vibrato.description",
-                examples: ["vibrato"],
-                usage: "vibrato",
-            },
-            category: "filters",
-            aliases: ["vb"],
-            cooldown: 3,
-            args: false,
-            vote: false,
-            player: {
-                voice: true,
-                dj: true,
-                active: true,
-                djPerm: null,
-            },
-            permissions: {
-                dev: false,
-                client: ["SendMessages", "ReadMessageHistory", "ViewChannel", "EmbedLinks"],
-                user: [],
-            },
-            slashCommand: true,
-            options: [],
-        });
-    }
+	constructor(client: heemusic) {
+		super(client, {
+			name: 'vibrato',
+			description: {
+				content: 'cmd.vibrato.description',
+				examples: ['vibrato'],
+				usage: 'vibrato',
+			},
+			category: 'filters',
+			aliases: ['vb'],
+			cooldown: 3,
+			args: false,
+			vote: false,
+			player: {
+				voice: true,
+				dj: true,
+				active: true,
+				djPerm: null,
+			},
+			permissions: {
+				dev: false,
+				client: ['SendMessages', 'ReadMessageHistory', 'ViewChannel', 'EmbedLinks'],
+				user: [],
+			},
+			slashCommand: true,
+			options: [],
+		});
+	}
 
-    public async run(client: heemusic, ctx: Context): Promise<any> {
-        const player = client.queue.get(ctx.guild!.id);
-        const vibratoEnabled = player.filters.includes("vibrato");
+	public async run(client: heemusic, ctx: Context): Promise<any> {
+		const player = client.manager.getPlayer(ctx.guild!.id);
+		if (!player) return await ctx.sendMessage(ctx.locale('event.message.no_music_playing'));
+		const vibratoEnabled = player.filterManager.filters.vibrato;
 
-        if (vibratoEnabled) {
-            player.player.setVibrato();
-            player.filters.splice(player.filters.indexOf("vibrato"), 1);
-            await ctx.sendMessage({
-                embeds: [
-                    {
-                        description: ctx.locale("cmd.vibrato.messages.disabled"),
-                        color: this.client.color.main,
-                    },
-                ],
-            });
-        } else {
-            player.player.setVibrato({ depth: 0.75, frequency: 4 });
-            player.filters.push("vibrato");
-            await ctx.sendMessage({
-                embeds: [
-                    {
-                        description: ctx.locale("cmd.vibrato.messages.enabled"),
-                        color: this.client.color.main,
-                    },
-                ],
-            });
-        }
-    }
+		if (vibratoEnabled) {
+			player.filterManager.toggleVibrato();
+			await ctx.sendMessage({
+				embeds: [
+					{
+						description: ctx.locale('cmd.vibrato.messages.disabled'),
+						color: this.client.color.main,
+					},
+				],
+			});
+		} else {
+			player.filterManager.toggleVibrato();
+			await ctx.sendMessage({
+				embeds: [
+					{
+						description: ctx.locale('cmd.vibrato.messages.enabled'),
+						color: this.client.color.main,
+					},
+				],
+			});
+		}
+	}
 }
 
 /**
  * Project: heemusic
  * Author: oniichanx
- * Main Contributor: oniichanx
+ * Main Contributor: LucasB25
  * Company: ArchGG
  * Copyright (c) 2024. All rights reserved.
  * This code is the property of ArchGG and may not be reproduced or

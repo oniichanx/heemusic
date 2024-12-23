@@ -1,17 +1,14 @@
-import Command from "./Command.js";
-import Context from "./Context.js";
-import Dispatcher from "./Dispatcher.js";
-import Event from "./Event.js";
-import heemusic from "./Heemusic.js";
-import { Queue } from "./Queue.js";
-import ShoukakuClient from "./Shoukaku.js";
+import Command from './Command';
+import Context from './Context';
+import Event from './Event';
+import heemusic from './Heemusic';
 
-export { Event, Queue, Command, heemusic, Context, ShoukakuClient, Dispatcher };
+export { Event, Command, heemusic, Context };
 
 /**
  * Project: heemusic
  * Author: oniichanx
- * Main Contributor: oniichanx
+ * Main Contributor: LucasB25
  * Company: ArchGG
  * Copyright (c) 2024. All rights reserved.
  * This code is the property of ArchGG and may not be reproduced or

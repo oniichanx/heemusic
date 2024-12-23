@@ -1,133 +1,162 @@
-import { Command, type Context, type heemusic } from "../../structures/index.js";
-import { Language, LocaleFlags } from "../../types.js";
+import type { AutocompleteInteraction } from 'discord.js';
+import { env } from '../../env';
+import { Command, type Context, type heemusic } from '../../structures/index';
+import { Language, LocaleFlags } from '../../types';
 
 export default class LanguageCommand extends Command {
-    constructor(client: heemusic) {
-        super(client, {
-            name: "language",
-            description: {
-                content: "cmd.language.description",
-                examples: ["language set `EnglishUS`", "language reset"],
-                usage: "language",
-            },
-            category: "config",
-            aliases: ["lang"],
-            cooldown: 3,
-            args: true,
-            vote: false,
-            player: {
-                voice: false,
-                dj: false,
-                active: false,
-                djPerm: null,
-            },
-            permissions: {
-                dev: false,
-                client: ["SendMessages", "ReadMessageHistory", "ViewChannel", "EmbedLinks"],
-                user: ["ManageGuild"],
-            },
-            slashCommand: true,
-            options: [
-                {
-                    name: "set",
-                    description: "cmd.language.options.set",
-                    type: 1,
-                    options: [
-                        {
-                            name: "language",
-                            description: "cmd.language.options.language",
-                            type: 3,
-                            required: true,
-                            autocomplete: true,
-                        },
-                    ],
-                },
-                {
-                    name: "reset",
-                    description: "cmd.language.options.reset",
-                    type: 1,
-                },
-            ],
-        });
-    }
+	constructor(client: heemusic) {
+		super(client, {
+			name: 'language',
+			description: {
+				content: 'cmd.language.description',
+				examples: ['language set `EnglishUS`', 'language reset'],
+				usage: 'language',
+			},
+			category: 'config',
+			aliases: ['lang'],
+			cooldown: 3,
+			args: true,
+			vote: false,
+			player: {
+				voice: false,
+				dj: false,
+				active: false,
+				djPerm: null,
+			},
+			permissions: {
+				dev: false,
+				client: ['SendMessages', 'ReadMessageHistory', 'ViewChannel', 'EmbedLinks'],
+				user: ['ManageGuild'],
+			},
+			slashCommand: true,
+			options: [
+				{
+					name: 'set',
+					description: 'cmd.language.options.set',
+					type: 1,
+					options: [
+						{
+							name: 'language',
+							description: 'cmd.language.options.language',
+							type: 3,
+							required: true,
+							autocomplete: true,
+						},
+					],
+				},
+				{
+					name: 'reset',
+					description: 'cmd.language.options.reset',
+					type: 1,
+				},
+			],
+		});
+	}
 
-    public async run(client: heemusic, ctx: Context, args: string[]): Promise<any> {
-        let subCommand: string;
+	public async run(client: heemusic, ctx: Context, args: string[]): Promise<any> {
+		let subCommand: string | undefined;
 
-        if (ctx.isInteraction) {
-            subCommand = ctx.interaction.options.data[0].name;
-        } else {
-            subCommand = args.shift();
-        }
-        if (subCommand === "set") {
-            const embed = client.embed().setColor(this.client.color.main);
+		if (ctx.isInteraction) {
+			subCommand = ctx.options.getSubCommand();
+		} else {
+			subCommand = args.shift();
+		}
 
-            const locale = await client.db.getLanguage(ctx.guild!.id);
+		const defaultLanguage = env.DEFAULT_LANGUAGE || Language.EnglishUS;
 
-            let lang: string;
+		if (subCommand === 'set') {
+			const embed = client.embed().setColor(this.client.color.main);
 
-            if (ctx.isInteraction) {
-                lang = ctx.interaction.options.data[0].options[0].value as string;
-            } else {
-                lang = args[0];
-            }
+			const locale = (await client.db.getLanguage(ctx.guild!.id)) || defaultLanguage;
 
-            if (!Object.values(Language).includes(lang as Language)) {
-                const availableLanguages = Object.entries(LocaleFlags)
-                    .map(([key, value]) => `${value}:\`${key}\``)
-                    .reduce((acc, curr, index) => {
-                        if (index % 2 === 0) {
-                            return acc + curr + (index === Object.entries(LocaleFlags).length - 1 ? "" : " ");
-                        }
-                        return `${acc + curr}\n`;
-                    }, "");
-                return ctx.sendMessage({
-                    embeds: [embed.setDescription(ctx.locale("cmd.language.invalid_language", { languages: availableLanguages }))],
-                });
-            }
+			let lang: string;
 
-            if (locale && locale === lang) {
-                return ctx.sendMessage({ embeds: [embed.setDescription(ctx.locale("cmd.language.already_set", { language: lang }))] });
-            }
+			if (ctx.isInteraction) {
+				lang = ctx.options.get('language')?.value as string;
+			} else {
+				lang = args[0];
+			}
 
-            await client.db.updateLanguage(ctx.guild!.id, lang);
-            ctx.guildLocale = lang;
+			if (!Object.values(Language).includes(lang as Language)) {
+				const availableLanguages = Object.entries(LocaleFlags)
+					.map(([key, value]) => `${value}:\`${key}\``)
+					.reduce((acc, curr, index) => {
+						if (index % 2 === 0) {
+							return acc + curr + (index === Object.entries(LocaleFlags).length - 1 ? '' : ' ');
+						}
+						return `${acc + curr}\n`;
+					}, '');
+				return ctx.sendMessage({
+					embeds: [
+						embed.setDescription(
+							ctx.locale('cmd.language.invalid_language', {
+								languages: availableLanguages,
+							}),
+						),
+					],
+				});
+			}
 
-            return ctx.sendMessage({ embeds: [embed.setDescription(ctx.locale("cmd.language.set", { language: lang }))] });
-        }
-        if (subCommand === "reset") {
-            const embed = client.embed().setColor(this.client.color.main);
+			if (locale && locale === lang) {
+				return ctx.sendMessage({
+					embeds: [
+						embed.setDescription(
+							ctx.locale('cmd.language.already_set', {
+								language: lang,
+							}),
+						),
+					],
+				});
+			}
 
-            const locale = await client.db.getLanguage(ctx.guild!.id);
+			await client.db.updateLanguage(ctx.guild!.id, lang);
+			ctx.guildLocale = lang;
 
-            if (!locale) {
-                return ctx.sendMessage({ embeds: [embed.setDescription(ctx.locale("cmd.language.not_set"))] });
-            }
+			return ctx.sendMessage({
+				embeds: [embed.setDescription(ctx.locale('cmd.language.set', { language: lang }))],
+			});
+		}
+		if (subCommand === 'reset') {
+			const embed = client.embed().setColor(this.client.color.main);
 
-            await client.db.updateLanguage(ctx.guild!.id, Language.EnglishUS);
-            ctx.guildLocale = Language.EnglishUS;
+			const locale = await client.db.getLanguage(ctx.guild!.id);
 
-            return ctx.sendMessage({ embeds: [embed.setDescription(ctx.locale("cmd.language.reset"))] });
-        }
-    }
+			if (!locale) {
+				return ctx.sendMessage({
+					embeds: [embed.setDescription(ctx.locale('cmd.language.not_set'))],
+				});
+			}
 
-    public async autocomplete(interaction) {
-        const focusedValue = interaction.options.getFocused();
+			await client.db.updateLanguage(ctx.guild!.id, defaultLanguage);
+			ctx.guildLocale = defaultLanguage;
 
-        // Fetch all available languages
-        const languages = Object.values(Language).map(language => ({
-            name: language,
-            value: language,
-        }));
+			return ctx.sendMessage({
+				embeds: [embed.setDescription(ctx.locale('cmd.language.reset'))],
+			});
+		}
+	}
 
-        // Filter languages based on the focused value
-        const filtered = languages.filter(language =>
-            language.name.toLowerCase().includes(focusedValue.toLowerCase())
-        );
+	public async autocomplete(interaction: AutocompleteInteraction): Promise<void> {
+		const focusedValue = interaction.options.getFocused();
 
-        // Respond with the filtered language options
-        await interaction.respond(filtered.slice(0, 25)).catch(console.error);
-    }
+		const languages = Object.values(Language).map(language => ({
+			name: language,
+			value: language,
+		}));
 
+		const filtered = languages.filter(language => language.name.toLowerCase().includes(focusedValue.toLowerCase()));
 
+		await interaction.respond(filtered.slice(0, 25)).catch(console.error);
+	}
 }
+
+/**
+ * Project: heemusic
+ * Author: oniichanx
+ * Main Contributor: LucasB25
+ * Company: ArchGG
+ * Copyright (c) 2024. All rights reserved.
+ * This code is the property of ArchGG and may not be reproduced or
+ * modified without permission. For more information, contact us at
+ * https://discord.gg/heelee
+ */

@@ -21,7 +21,8 @@
 		"lavalink": {
 			"description": "โชว์สถานะการทำงาน Lavalink.",
 			"title": "สถานะการทำงาน Lavalink",
-			"content": "Player: {players}\nPlaying Players: {playingPlayers}\nUptime: {uptime}\nCores: {cores} Core(s)\nMemory Usage: {used} / {reservable}\nSystem Load: {systemLoad}%\nLavalink Load: {lavalinkLoad}%"
+			"content": "Player: {players}\nPlaying Players: {playingPlayers}\nUptime: {uptime}\nCores: {cores} Core(s)\nMemory Usage: {used} / {reservable}\nSystem Load: {systemLoad}%\nLavalink Load: {lavalinkLoad}%",
+			"page_info": "Page {index} of {total}"
 		},
 		"invite": {
 			"description": "ขอลิ้งบอทไปนอนเกาหีเล่นในห้อง.",
@@ -131,16 +132,21 @@
 		},
 		"bassboost": {
 			"description": "on/off bassboost filter",
+			"options": {
+				"level": "The bassboost level you want to set"
+			},
 			"messages": {
-				"filter_enabled": "`✅` | Bassboost filter has been `ENABLED`. \n**Be careful, listening too loudly can damage your hearing!**",
-				"filter_disabled": "`✅` | Bassboost filter has been `DISABLED`."
+				"high": "`✅` | High bassboost filter has been `ENABLED`.",
+				"low": "`✅` | Low bassboost filter has been `ENABLED`.",
+				"medium": "`✅` | Medium bassboost filter has been `ENABLED`.",
+				"off": "`✅` | Bassboost filter has been `DISABLED`."
 			}
 		},
-		"distorsion": {
-			"description": "Toggle the distorsion filter on/off",
+		"distortion": {
+			"description": "Toggle the distortion filter on/off",
 			"messages": {
-				"filter_enabled": "`✅` | Distorsion filter has been `ENABLED`.",
-				"filter_disabled": "`✅` | Distorsion filter has been `DISABLED`."
+				"filter_enabled": "`✅` | Distortion filter has been `ENABLED`.",
+				"filter_disabled": "`✅` | Distortion filter has been `DISABLED`."
 			}
 		},
 		"karaoke": {
@@ -240,6 +246,7 @@
 		},
 		"grab": {
 			"description": "Grabs the current playing song on your DM",
+			"loading": "Loading...",
 			"content": "**Duration:** {length}\n**ชายผู้สั่งให้ผมเริ่มดูดไข่ โดยนาย:** <@{requester}>\n**Link:** [Click here]({uri})",
 			"check_dm": "Please check your DM.",
 			"dm_failed": "I couldn't send you a DM. Please make sure allow direct messages is turned on."
@@ -260,6 +267,15 @@
 			"looping_song": "**Looping the song.**",
 			"looping_queue": "**Looping the queue.**",
 			"looping_off": "**Looping is now off.**"
+		},
+		"lyrics": {
+			"description": "Get's the lyrics of the currently playing track",
+			"lyrics_track": "### Lyrics for: [{trackTitle}]({trackUrl})\n**`{lyrics}`**",
+			"searching": "`🔍` Searching for **{trackTitle}** lyrics...",
+			"errors": {
+				"no_results": "No lyrics found for the current track.",
+				"lyrics_error": "An error occurred while getting the lyrics."
+			}
 		},
 		"nowplaying": {
 			"description": "แสดงเพลงที่กำลังเล่นอยู่",
@@ -344,6 +360,7 @@
 			"options": {
 				"song": "เพลงที่คุณต้องการค้นหา"
 			},
+			"select": "โปรดเลือกเพลงที่คุณต้องการจะเล่นเพลง",
 			"errors": {
 				"no_results": "ไม่พบรูหีให้เด้า.",
 				"search_error": "There was an error while searching."
@@ -550,7 +567,6 @@
 		"interaction": {
 			"setup_channel": "You can't use this command in the setup channel.",
 			"no_send_message": "I don't have **`SendMessage`** permission in `{guild}`\nchannel: {channel}.",
-			"no_embed_links": "I don't have **`EmbedLinks`** permission.",
 			"no_permission": "I don't have enough permissions to execute this command.",
 			"no_user_permission": "You don't have enough permissions to use this command.",
 			"no_voice_channel": "You must be connected to a voice channel to use this `{command}` command.",
@@ -562,12 +578,13 @@
 			"no_dj_role": "DJ role is not set.",
 			"no_dj_permission": "You need to have the DJ role to use this command.",
 			"cooldown": "Please wait {time} more second(s) before reusing the `{command}` command.",
-			"error": "An error occurred: `{error}`"
+			"error": "An error occurred: `{error}`",
+			"vote_button": "Vote for me",
+			"vote_message": "Wait! You need to vote on top.gg to use this command. Thanks."
 		},
 		"message": {
 			"prefix_mention": "Hey, my prefix for this server is `{prefix}`. Want more info? then do `{prefix}help`\nStay Safe, Stay Awesome!",
 			"no_send_message": "I don't have **`SendMessage`** permission in `{guild}`\nchannel: {channel}.",
-			"no_embed_links": "I don't have **`EmbedLinks`** permission.",
 			"no_permission": "I don't have enough permissions to execute this command.",
 			"no_user_permission": "You don't have enough permissions to use this command.",
 			"no_voice_channel": "You must be connected to a voice channel to use this `{command}` command.",
@@ -586,7 +603,9 @@
 			"error": "An error occurred: `{error}`",
 			"no_voice_channel_queue": "กราบเรียนคุณมึงเชิญเข้าห้องมาก่อนจะใส่คิวเย็ดนะดอกทอง.",
 			"no_permission_connect_speak": "I don't have enough permission to connect/speak in <#{channel}>.",
-			"different_voice_channel_queue": "You are not connected to <#{channel}> to queue songs."
+			"different_voice_channel_queue": "You are not connected to <#{channel}> to queue songs.",
+			"vote_button": "Vote for me!",
+			"vote_message": "Wait! You need to vote on top.gg to use this command. Thanks."
 		},
 		"setupButton": {
 			"no_voice_channel_button": "กราบเรียนคุณมึงเชิญเข้าห้องมาก่อนจะใช้ปุ่มน่ะอีสัส.",
@@ -613,7 +632,6 @@
 			"no_previous_track": "ไม่ได้เย็ดผู้หญิงก่อนหน้านี้.",
 			"playing_previous": "กำลังกลับไปซ้ำหีเดิมก่อนหน้า.",
 			"previous_footer": "กำลังกลับไปซ้ำหีเดิมก่อนหน้า โดยนาย {displayName}",
-			"rewind_limit": "ถอกควยลงจนเส้นสองสลึงขาดล่ะไอเหิ้ยไม่มีอีกล่ะเส้นสองสลึง.",
 			"rewinded": "ถอกควยจนสุดล่ะไอเหิ้ยจะเอาสุดไปถึงไหน.",
 			"rewind_footer": "กำลังถอกหัวควยลง โดยนาย {displayName}",
 			"forward_limit": "ดึงหนังควยไปจะขาดอยู่แล้วมันไม่ต่อไปไม่ได้ล่ะไอสัส.",

@@ -1,20 +1,32 @@
 {
   "compilerOptions": {
-    "target": "es2023",
-    "module": "es2022",
-    "lib": ["es2023"],
-    "declaration": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": false,
+    "target": "ESNext",
+    "lib": ["ESNext", "WebWorker"],
+    "module": "CommonJS",
     "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": false,
+    "removeComments": true,
+    "importHelpers": true,
+    "strict": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "preserveConstEnums": true,
+    /* Type Checking */
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "noErrorTruncation": true,
+    "outDir": "./dist",
+    "stripInternal": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist/", "node_modules/"],
+  "include": ["src/**/*"]
 }

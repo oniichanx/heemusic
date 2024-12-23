@@ -14,15 +14,19 @@ datasource db {
   url      = "file:./heemusic.db"
 }
 
+model Bot {
+  botId         String @unique
+  totalPlaySong Int
+}
+
 model Guild {
-  guildId    String      @id
-  prefix     String
-  language   String?
-  stay       Stay?
-  dj         Dj?
-  roles      Role[]
-  botchannel Botchannel?
-  setup      Setup?
+  guildId  String  @id
+  prefix   String
+  language String? @default("EnglishUS")
+  stay     Stay?
+  dj       Dj?
+  roles    Role[]
+  setup    Setup?
 }
 
 model Stay {
@@ -47,27 +51,12 @@ model Role {
 }
 
 model Playlist {
-  id     String @id @default(uuid())
+  id     String  @id @default(uuid())
   userId String
   name   String
-  songs  Song[]
+  tracks String? // Store the array of encoded tracks as a JSON string
 
   @@unique([userId, name])
-}
-
-model Song {
-  id         String   @id @default(uuid())
-  track      String
-  playlistId String
-  playlist   Playlist @relation(fields: [playlistId], references: [id])
-
-  @@unique([track, playlistId])
-}
-
-model Botchannel {
-  guildId String @id
-  textId  String
-  Guild   Guild  @relation(fields: [guildId], references: [guildId])
 }
 
 model Setup {
@@ -75,9 +64,4 @@ model Setup {
   textId    String
   messageId String
   Guild     Guild  @relation(fields: [guildId], references: [guildId])
-}
-
-model Premium {
-  userId  String @id
-  guildId String
 }
