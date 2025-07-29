@@ -53,7 +53,7 @@
     "topgg-autoposter": "^2.0.2",
     "tslib": "^2.8.1",
     "undici": "^7.1.0",
-    "zod": "^3.23.8"
+    "zod": "^4.0.13"
   },
   "signale": {
     "displayScope": true,
